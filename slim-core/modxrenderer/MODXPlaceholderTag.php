@@ -70,8 +70,10 @@ class MODXPlaceholderTag extends MODXTag {
         if (!is_string($this->_content)) {
             if (isset($options['content'])) {
                 $this->_content = $options['content'];
-            } else {
+            } elseif (isset($this->parser->data[$this->get('name')])) {
                 $this->_content = $this->parser->data[$this->get('name')];
+            } else {
+                $this->_content = null;
             }
         }
         return $this->_content;
