@@ -19,6 +19,10 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
     const PUBLIC_BASE_PATH = '/Volumes/Media/_git/sr_modxrenderer/public/';
     const SITE_URL = 'http://modxrenderer.local/';
 
+    public static $siteSettings = array(
+        'site_name' => 'MODXRenderer Test Suite',
+        'site_css' => ['sepia' => 'color sepia'],
+    );
     /**
      * @test constructor
      * @expectedException InvalidArgumentException
@@ -42,11 +46,8 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
             'template_path' => self::APP_CORE_PATH . 'tests/Renderer/templates/',
             'chunk_path' => self::APP_CORE_PATH . 'tests/Renderer/chunks/',
         );
-        $siteSettings = array(
-            'site_name' => 'MODXRenderer Test Suite',
-            'site_css' => ['sepia' => 'color sepia'],
-        );
-        $renderer = new MODXRenderer($rendererSettings, $siteSettings);
+
+        $renderer = new MODXRenderer($rendererSettings, self::$siteSettings);
 
         $success = ($renderer instanceof MODXRenderer);
 
@@ -54,7 +55,75 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
 
         return $renderer;
     }
+    /**
+     * @test render fetch fail data
+     * @depends testConstructRenderer
+     * @expectedException InvalidArgumentException
+     */
+    public function testRenderFetchFailData(MODXRenderer $renderer) {
+        $renderer->fetch('testTemplate.tpl', ['template' => 'this causes error']);
+    }
+    /**
+     * @test render fetch fail template
+     * @depends testConstructRenderer
+     * @expectedException RuntimeException
+     */
+    public function testRenderFetchFailTemplate(MODXRenderer $renderer) {
+        $renderer->fetch('non-existent.tpl');
+    }
+    /**
+     * @test render get attributes
+     * @depends testConstructRenderer
+     */
+    public function testRenderGetAttributes(MODXRenderer $renderer) {
+        $expected = json_encode(self::$siteSettings);
+        $result = json_encode($renderer->getAttributes());
+        $this->assertEquals($expected, $result);
+        $shouldFail = $renderer->getAttribute('non-existent-attribute');
+        $this->assertEquals(false, $shouldFail);
+    }
 
+    /**
+     * @test render set attributes
+     * @depends testConstructRenderer
+     */
+    public function testRenderSetAttributes(MODXRenderer $renderer) {
+        $newAttributes = ['test_set_attributes' => 'test_set_attributes_value'];
+        $renderer->setAttributes($newAttributes);
+        $expected = json_encode($newAttributes);
+        $result = json_encode($renderer->getAttributes());
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @test render add attribute
+     * @depends testConstructRenderer
+     */
+    public function testRenderAddAttribute(MODXRenderer $renderer) {
+        $attributes = $renderer->getAttributes();
+        $attributes['added_attribute'] = 'added attribute value';
+        $renderer->addAttribute('added_attribute', 'added attribute value');
+        $this->assertEquals('added attribute value', $renderer->getAttribute('added_attribute'));
+        $expected = json_encode($attributes);
+        $result = json_encode($renderer->getAttributes());
+        $this->assertEquals($expected, $result);
+    }
+    /**
+     * @test collect element tags
+     * @depends testConstructRenderer
+     */
+    public function testRenderCollectTags(MODXRenderer $renderer) {
+        $content = file_get_contents(self::APP_CORE_PATH . 'tests/Renderer/templates/testCollectElements.tpl');
+        $result = [];
+        $renderer->collectElementTags($content, $result);
+        //var_dump($result);
+        $this->assertEquals(7, count($result));
+        $success = 0;
+        foreach ($result as $tagArray) {
+            if (strpos($content, $tagArray[0]) !== false) $success++;
+        }
+        $this->assertEquals(7, $success);
+    }
     /**
      * @test render template
      * @depends testConstructRenderer
@@ -97,6 +166,7 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(trim($response->getBody()->__toString()), 'MODXRenderer Test Chunk');
 
     }
+
     /**
      * @test render nested chunks in template
      * @depends testConstructRenderer
@@ -105,6 +175,60 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
         $response = new Response();
         $renderer->render($response, 'testRenderChunkNested.tpl');
         $this->assertEquals(trim($response->getBody()->__toString()), 'MODXRenderer Test Nested Chunk: MODXRenderer Test Chunk');
+
+    }
+    /**
+     * @test parser process elements
+     * @depends testConstructRenderer
+     */
+    public function testParserProcessElementTags(MODXRenderer $renderer) {
+        $content = file_get_contents(self::APP_CORE_PATH . 'tests/Renderer/templates/testProcessElements.tpl');
+        $content1 = $content;
+        $content2 = $content;
+        $content3 = $content;
+
+        $renderer->processElementTags('', $content, true, true);
+        $expected = "Site Setting: MODXRenderer Test Suite
+Nested Site Setting: color sepia
+Chunk: MODXRenderer Test Chunk
+
+Nested Chunk: MODXRenderer Test Nested Chunk: MODXRenderer Test Chunk
+
+
+Test Arg: MODXRenderer Test Arg
+Test Not Found Tag:\040
+Test Uncacheable Tag:\040
+";
+        //var_dump($content);
+        $this->assertEquals($expected, $content);
+
+        $renderer->processElementTags('', $content1, false, true);
+        $expected1 = "Site Setting: MODXRenderer Test Suite
+Nested Site Setting: color sepia
+Chunk: MODXRenderer Test Chunk
+
+Nested Chunk: MODXRenderer Test Nested Chunk: MODXRenderer Test Chunk
+
+
+Test Arg: MODXRenderer Test Arg
+Test Not Found Tag:\040
+Test Uncacheable Tag: [[!+uncacheable_tag]]
+";
+        $this->assertEquals($expected1, $content1);
+
+        $renderer->processElementTags('', $content2, false, false);
+        $expected2 = "Site Setting: MODXRenderer Test Suite
+Nested Site Setting: color sepia
+Chunk: MODXRenderer Test Chunk
+
+Nested Chunk: MODXRenderer Test Nested Chunk: MODXRenderer Test Chunk
+
+
+Test Arg: MODXRenderer Test Arg
+Test Not Found Tag: [[+not_found_tag]]
+Test Uncacheable Tag: [[!+uncacheable_tag]]
+";
+        $this->assertEquals($expected2, $content2);
 
     }
     /**
@@ -131,7 +255,31 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
         $content= '[[+test_prop]]';
         $result = $chunk->process($properties, $content);
         $this->assertEquals($result, $properties['test_prop']);
+        $this->assertEquals('[[+test_prop]]', $chunk->getContent());
 
+    }
+    /**
+     * @test get chunk content
+     * @depends testConstructRenderer
+     */
+    public function testChunkTagContent(MODXParser $parser) {
+
+        $chunk = new MODXChunkTag($parser);
+        $chunk->set('name','testChunkEmpty');
+        $this->assertEquals("", $chunk->getContent());
+        $chunk->setContent('test');
+        $this->assertEquals('test', $chunk->get('name'));
+        return $chunk;
+    }
+    /**
+     * @test get chunk test
+     * @depends testConstructRenderer
+     */
+    public function testParserGetChunk(MODXParser $parser) {
+
+        $result = $parser->getChunk('testChunkPropString', array('prop_string' => 'testing getChunk'));
+        $this->assertEquals("MODXRenderer Test Chunk Prop String: testing getChunk
+", $result);
     }
     /**
      * @test process chunk tag
@@ -154,6 +302,17 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $arraySuccess1);
         $this->assertEquals(true, $arraySuccess2);
         $this->assertEquals(true, $stringSuccess);
+
+    }
+    /**
+     * @test render chunk in template
+     * @depends testConstructRenderer
+     */
+    public function testChunkPropString(MODXRenderer $renderer) {
+        $response = new Response();
+        $renderer->render($response, 'testChunkPropString.tpl');
+
+        $this->assertEquals(trim($response->getBody()->__toString()), 'Chunk with prop string: MODXRenderer Test Chunk Prop String: MODXRenderer Test Suite');
 
     }
 

@@ -181,14 +181,16 @@ class MODXRenderer extends MODXParser
             ob_start();
             $this->protectedIncludeScope(self::$template_path . $template, $data);
             $output = ob_get_clean();
-        } catch(\Throwable $e) { // PHP 7+
-            ob_end_clean();
-            throw $e;
-        } catch(\Exception $e) { // PHP < 7
+        } // @codeCoverageIgnoreStart
+        catch(\Throwable $e) { // PHP 7+
             ob_end_clean();
             throw $e;
         }
-
+        catch(\Exception $e) { // PHP < 7
+            ob_end_clean();
+            throw $e;
+        }
+        // @codeCoverageIgnoreEnd
         return $output;
     }
 

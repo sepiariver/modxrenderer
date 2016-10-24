@@ -312,7 +312,7 @@ abstract class MODXTag {
         $set = false;
         $propertyArray = array();
         if (is_string($properties)) {
-            $properties = $this->parser->parsePropertyString($properties);
+            $properties = $this->parser->parsePropertyString($properties, true);
         }
         if (is_array($properties)) {
             foreach ($properties as $propKey => $property) {
@@ -324,7 +324,8 @@ abstract class MODXTag {
                         'options' => $property[3],
                         'value' => $property[4],
                     );
-                } elseif (is_array($property) && isset($property['value'])) {
+                } // @codeCoverageIgnoreStart
+                elseif (is_array($property) && isset($property['value'])) {
                     $propertyArray[$property['name']] = array(
                         'name' => $property['name'],
                         'desc' => isset($property['description']) ? $property['description'] : (isset($property['desc']) ? $property['desc'] : ''),
@@ -332,7 +333,8 @@ abstract class MODXTag {
                         'options' => isset($property['options']) ? $property['options'] : array(),
                         'value' => $property['value'],
                     );
-                } else {
+                } // @codeCoverageIgnoreEnd
+                else {
                     $propertyArray[$propKey] = array(
                         'name' => $propKey,
                         'desc' => '',
@@ -358,6 +360,7 @@ abstract class MODXTag {
      *
      * @return boolean True if the element can be stored to or retrieved from
      * the element cache.
+     * @codeCoverageIgnore
      */
     public function isCacheable() {
         return $this->_cacheable;
@@ -368,6 +371,7 @@ abstract class MODXTag {
      *
      * @param boolean $cacheable Indicates the value to set for cacheability of
      * this element.
+     * @codeCoverageIgnore
      */
     public function setCacheable($cacheable = true) {
         $this->_cacheable = (boolean) $cacheable;

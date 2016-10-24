@@ -240,6 +240,7 @@ class MODXParser {
                                     $tagMap[$tag[0]]= '';
                                 }
                             }
+                            // @codeCoverageIgnoreStart
                             elseif (!empty ($tokens) && !in_array($token, $tokens)) {
                                 $collected--;
                                 continue;
@@ -249,6 +250,7 @@ class MODXParser {
                                 $processed++;
                                 continue;
                             }
+                            // @codeCoverageIgnoreEnd
                             $tagOutput= $this->processTag($tag, $processUncacheable);
 
                             if (($tagOutput === null || $tagOutput === false) && $removeUnprocessed) {
@@ -330,14 +332,17 @@ class MODXParser {
                         $property= $this->escSplit('=', $prop);
                         if (count($property) == 2) {
                             $propName= $property[0];
+                            // @codeCoverageIgnoreStart
                             if (substr($propName, 0, 4) == "amp;") {
                                 $propName= substr($propName, 4);
                             }
+                            // @codeCoverageIgnoreEnd
                             $propValue= $property[1];
                             $propType= 'textfield';
                             $propDesc= '';
                             $propOptions= array();
                             $pvTmp= $this->escSplit(';', $propValue);
+                            // @codeCoverageIgnoreStart
                             if ($pvTmp && isset ($pvTmp[1])) {
                                 $propDesc= $pvTmp[0];
                                 if (($pvTmp[1]=='list' || $pvTmp[1]=='combo') && isset($pvTmp[3]) && $pvTmp[3]) {
@@ -359,6 +364,7 @@ class MODXParser {
                                     $propValue = $pvTmp[0];
                                 }
                             }
+                            // @codeCoverageIgnoreEnd
                             if ($propValue[0] == '`' && $propValue[strlen($propValue) - 1] == '`') {
                                 $propValue= substr($propValue, 1, strlen($propValue) - 2);
                             }
@@ -366,6 +372,7 @@ class MODXParser {
                             if ($valuesOnly) {
                                 $properties[$propName]= $propValue;
                             } else {
+                                // @codeCoverageIgnoreStart
                                 $properties[$propName]= array(
                                     'name' => $propName,
                                     'desc' => $propDesc,
@@ -373,6 +380,7 @@ class MODXParser {
                                     'options' => $propOptions,
                                     'value' => $propValue
                                 );
+                                // @codeCoverageIgnoreEnd
                             }
                         }
                     }
@@ -385,6 +393,7 @@ class MODXParser {
                  * @access protected
                  * @param string $type A property type string.
                  * @return string A valid xtype.
+                 * @codeCoverageIgnore
                  */
                 protected function _XType($type) {
                     $xtype = $type;

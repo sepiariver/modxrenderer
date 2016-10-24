@@ -1,0 +1,7 @@
+Site Setting: [[++site_name]]
+Nested Site Setting: [[++site_css.sepia]]
+Chunk: [[$testChunk]]
+Nested Chunk: [[$testChunkNested]]
+Test Arg: [[+test_arg]]
+Test Not Found Tag: [[+not_found_tag]]
+Test Uncacheable Tag: [[!+uncacheable_tag]]
