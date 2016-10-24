@@ -4,9 +4,9 @@ return [
 
         // Site configuration
         'site' => [
-            'site_name' => 'Sepia River Photography',
-            'site_tagline' => 'Vancouver photographer: architectural, interiors, editorial and people photography.',
-            'site_name_styled' => 'Sepia River <span class="grey">Photography</span>',
+            'site_name' => 'MODXRenderer for Slim',
+            'site_tagline' => 'Familiar MODX template language with the Slim microframework.',
+            'site_name_styled' => 'MODX<span style="color:[[++site_css.sepia]];">Renderer</span>',
             'site_url' => SITE_URL,
             'site_css' => [
                 'sepia' => '#896536',
