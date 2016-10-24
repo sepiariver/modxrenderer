@@ -1,0 +1,11 @@
+<phpunit bootstrap="/Volumes/Media/_git/sr_modxrenderer/slim-core/vendor/autoload.php">
+    <filter>
+      <whitelist processUncoveredFilesFromWhitelist="true">
+        <directory suffix=".php">/Volumes/Media/_git/sr_modxrenderer/slim-core/modxrenderer</directory>
+      </whitelist>
+    </filter>
+    <logging>
+      <log type="coverage-html" target="/Volumes/Media/_git/sr_modxrenderer/public/test-results" lowUpperBound="35"
+           highLowerBound="70"/>
+    </logging>
+</phpunit>
