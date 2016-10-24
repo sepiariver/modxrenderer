@@ -167,13 +167,13 @@ class MODXRenderer extends MODXParser
             throw new \InvalidArgumentException("Duplicate template key found");
         }
 
-        if (!is_file(self::TEMPLATE_PATH . $template)) {
+        if (!is_file(self::$template_path . $template)) {
             throw new \RuntimeException("View cannot render `$template` because the template does not exist");
         }
 
         try {
             ob_start();
-            $this->protectedIncludeScope(self::TEMPLATE_PATH . $template, $data);
+            $this->protectedIncludeScope(self::$template_path . $template, $data);
             $output = ob_get_clean();
         } catch(\Throwable $e) { // PHP 7+
             ob_end_clean();

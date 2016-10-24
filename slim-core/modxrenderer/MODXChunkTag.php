@@ -21,7 +21,7 @@ class MODXChunkTag extends MODXTag {
         $this->setCacheable(false);
         $this->setToken('$');
         $this->maxIterations = $maxIterations;
-        $this->chunkPath = MODXRenderer::CHUNK_PATH;
+        $this->chunkPath = MODXRenderer::$chunk_path;
     }
 
     /**

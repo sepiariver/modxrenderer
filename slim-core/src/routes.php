@@ -5,9 +5,9 @@ $app->get('/', function ($request, $response, $args) {
 
 $renderer = $this->get('renderer');
 $args['images'] = '<!--images go here-->';
-//$result = $renderer->render($response, 'index.tpl', $args);
+$result = $renderer->render($response, 'index.tpl', $args);
 
-return $response;
+return $result;
 
 });
 
