@@ -6,7 +6,7 @@ if (!defined('PUBLIC_BASE_PATH')) {
     define('PUBLIC_BASE_PATH', realpath(__DIR__) . '/');
 }
 if (!defined('SITE_URL')) {
-    define('SITE_URL', 'http://srphoto.local/');
+    define('SITE_URL', 'http://modxrenderer.local/');
 }
 
 $loader = require APP_CORE_PATH . 'vendor/autoload.php';

@@ -35,13 +35,6 @@ return [
             'chunk_path' => APP_CORE_PATH . 'chunks/',
         ],
 
-        // Monolog settings
-        'logger' => [
-            'name' => 'slim-app',
-            'path' => APP_CORE_PATH . 'logs/app.log',
-            'level' => \Monolog\Logger::DEBUG,
-        ],
-
         // Cache
         'cache' => [
             'path' => APP_CORE_PATH . 'cache/',
