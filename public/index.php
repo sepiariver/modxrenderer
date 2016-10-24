@@ -15,7 +15,6 @@ session_start();
 
 // Instantiate the app
 $settings = require APP_CORE_PATH . 'src/settings.php';
-
 $app = new \Slim\App($settings);
 
 // Set up dependencies

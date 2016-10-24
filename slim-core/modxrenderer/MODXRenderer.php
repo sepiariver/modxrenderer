@@ -11,7 +11,7 @@ namespace MODXRenderer;
 
 use \InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use MODXRenderer\MODXParser;
+//use MODXRenderer\MODXParser;
 
 /**
  * Class MODXRenderer
@@ -19,23 +19,24 @@ use MODXRenderer\MODXParser;
  *
  * Render MODX Templates and Chunks into a PSR-7 Response object
  */
-class MODXRenderer extends MODXParser
+ //extends MODXParser
+class MODXRenderer
 {
     /**
      * CONST for Template path
      * @var string
      */
-    const TEMPLATE_PATH = '';
+    public static $template_path;
     /**
      * CONST for Chunk path
      * @var string
      */
-    const CHUNK_PATH = '';
+    public static $chunk_path;
     /**
      * CONST for Site Settings prefix in MODXParser data.
      * @var string
      */
-    const SITE_PREFIX = '+';
+    public static $site_prefix = '+';
     /**
      * Container for site settings.
      * @var array
@@ -49,13 +50,13 @@ class MODXRenderer extends MODXParser
      */
     public function __construct(array $settings)
     {
-        $this->setConstants($settings['renderer']);
+
+        self::setStaticData($settings['renderer']);
         if (is_array($settings['site'])) {
             $this->setAttributes($settings['site']);
-            parent::__construct($this->attributes);
+            //parent::__construct($this->attributes);
         }
     }
-
     /**
      * Set required CONSTANTS
      *
@@ -65,13 +66,14 @@ class MODXRenderer extends MODXParser
      *
      * @throws \InvalidArgumentException
      */
-    public function setConstants(array $config)
+    public static function setStaticData(array $config)
     {
         if (!is_dir($config['template_path']) || !is_dir($config['chunk_path'])) {
             throw new \InvalidArgumentException("MODXRenderer requires template_path and chunk_path.");
         }
-        self::TEMPLATE_PATH = rtrim($config['template_path'], '/\\') . '/';
-        self::CHUNK_PATH = rtrim($config['chunk_path'], '/\\') . '/';
+        self::$template_path = rtrim($config['template_path'], '/\\') . '/';
+        self::$chunk_path = rtrim($config['chunk_path'], '/\\') . '/';
+        if (!empty($config['site_prefix'])) self::$site_prefix = $config['site_prefix'];
         return true;
     }
     /**
@@ -193,4 +195,5 @@ class MODXRenderer extends MODXParser
         $this->processElementTags('', $content, true, false, '[[', ']]', array(), 10);
         echo $content;
     }
+
 }
