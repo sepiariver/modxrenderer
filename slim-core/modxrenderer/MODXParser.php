@@ -51,7 +51,11 @@ class MODXParser {
      * @param array $data
      */
     function __construct(array $data) {
-        $this->data = $this->toPlaceholders($data, MODXRenderer::SITE_PREFIX);
+        $prefixed = [];
+        foreach ($data as $k => $v) {
+            $prefixed[MODXRenderer::$site_prefix . $k] = $v;
+        }
+        $this->toPlaceholders($prefixed);
     }
 
         /**

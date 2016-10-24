@@ -11,7 +11,7 @@ namespace MODXRenderer;
 
 use \InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-//use MODXRenderer\MODXParser;
+use MODXRenderer\MODXParser;
 
 /**
  * Class MODXRenderer
@@ -20,23 +20,28 @@ use Psr\Http\Message\ResponseInterface;
  * Render MODX Templates and Chunks into a PSR-7 Response object
  */
  //extends MODXParser
-class MODXRenderer
+class MODXRenderer extends MODXParser
 {
     /**
-     * CONST for Template path
+     * Template path
      * @var string
      */
     public static $template_path;
     /**
-     * CONST for Chunk path
+     * Chunk path
      * @var string
      */
     public static $chunk_path;
     /**
-     * CONST for Site Settings prefix in MODXParser data.
+     * Site Settings to prefix MODXParser data.
      * @var string
      */
     public static $site_prefix = '+';
+    /**
+     * Reference to renderer key in container
+     * @var string
+     */
+    public static $service_name;
     /**
      * Container for site settings.
      * @var array
@@ -48,14 +53,11 @@ class MODXRenderer
      *
      * @param array $settings
      */
-    public function __construct(array $settings)
+    public function __construct(array $rendererSettings, array $siteSettings = [])
     {
-
-        self::setStaticData($settings['renderer']);
-        if (is_array($settings['site'])) {
-            $this->setAttributes($settings['site']);
-            //parent::__construct($this->attributes);
-        }
+        self::setStaticData($rendererSettings);
+        $this->setAttributes($siteSettings);
+        parent::__construct($this->attributes);
     }
     /**
      * Set required CONSTANTS
