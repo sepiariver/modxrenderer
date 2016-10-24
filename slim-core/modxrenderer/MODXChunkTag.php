@@ -99,5 +99,5 @@ class MODXChunkTag extends MODXTag {
      *
      * {@inheritdoc}
      */
-    public function setCacheable($cacheable = true) {}
+    public function setCacheable($cacheable = false) {}
 }

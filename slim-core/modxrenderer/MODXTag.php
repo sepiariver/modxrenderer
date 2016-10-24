@@ -124,17 +124,11 @@ abstract class MODXTag {
      * @param mixed $v The value to assign to the field.
      */
     public function set($k, $v) {
-        if ($k == 'properties') {
+        if ($k === 'properties') {
             $v = is_array($v) ? serialize($v) : $v;
         }
-        $this->_fields[$k]= $v;
-    }
-    /**
-     * Cache the element into the elementCache by tag signature.
-     * @see modElement::cache()
-     */
-    public function cache() {
-
+        $this->_fields[$k] = $v;
+        return ($this->_fields[$k] === $v);
     }
 
     /**

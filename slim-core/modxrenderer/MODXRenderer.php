@@ -70,7 +70,13 @@ class MODXRenderer extends MODXParser
      */
     public static function setStaticData(array $config)
     {
-        if (!is_dir($config['template_path']) || !is_dir($config['chunk_path'])) {
+        if (
+            !isset($config['template_path']) ||
+            !is_dir($config['template_path']) ||
+            !isset($config['chunk_path']) ||
+            !is_dir($config['chunk_path'])
+            )
+        {
             throw new \InvalidArgumentException("MODXRenderer requires template_path and chunk_path.");
         }
         self::$template_path = rtrim($config['template_path'], '/\\') . '/';
