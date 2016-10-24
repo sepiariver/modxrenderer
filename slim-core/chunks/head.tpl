@@ -1,9 +1,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sepia River Photography</title>
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com">
+    <title>MODXRenderer for Slim</title>
     <base href="[[++site_url]]">
 
     <!-- Open Graph Tags -->
@@ -12,19 +10,15 @@
     <meta property="og:description" content="[[++site_tagline]]" />
     <meta property="og:url" content="[[++request_uri]]" />
     <meta property="og:site_name" content="[[++site_name]]" />
-    <meta property="og:image" content="" />
     <meta name="twitter:site" content="[[++social.twitter]]" />
     <meta name="description" content="[[++site_tagline]]" />
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" sizes="16x16 24x24 32x32 48x48" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" sizes="16x16 24x24 32x32 48x48" />
     <link rel="apple-touch-icon-precomposed" href="apple-touch-icon.png" />
-    [[- concatenated
+    [[- MODX comment
     <link href="//fonts.googleapis.com/css?family=Lato:200,300,400" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="[[++assets_url]]css/reset.css">
-    <link rel="stylesheet" href="[[++assets_url]]css/gallery.css">
     ]]
-    <link rel="stylesheet" href="[[++assets_url]]css/styles.min.css">
+    <link rel="stylesheet" href="[[++assets_url]]css/reset.css">
     <style>
         body {
             display: flex;
@@ -108,42 +102,12 @@
             [[++site_css.transitions]]
         }
 
-        .gray,
-        .grey {
-            color: #AAA;
-            [[++site_css.transitions]]
-        }
-
-        .takeover {
-            display: none;
-            position: absolute;
-            z-index: -1;
-        }
-
-        a.takeover {
-            border: none;
-            text-decoration: none;
-        }
-
-        .takeover:target {
-            display: flex;
-            position: fixed;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: rgba(0, 0, 0, .9);
-        }
-
     </style>
     <script type="application/ld+json">
         {
             "@context": "http://schema.org",
-            "@type": "ImageGallery",
-            "name": "Sepia River Photography",
+            "@type": "Website",
+            "name": "MODXRenderer for Slim",
             "url": "[[++site_url]]",
             "image": "[[++site_url]]apple-touch-icon.png"
             "author": {
@@ -155,6 +119,5 @@
                 "name": "Yee Jee Tso"
             }
         }
-
     </script>
 </head>
