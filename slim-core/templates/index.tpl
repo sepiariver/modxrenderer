@@ -4,9 +4,13 @@
 <body>
 [[$nav]]
     <main>
-        <h1>[[++site_name]]</h1>
-        <h4>[[++site_tagline]]</h4>
-        [[+images]]
+        <div class="headings">
+            <h1>[[++site_name]]</h1>
+            <h4>[[++site_tagline]]</h4>
+        </div>
+        <div class="gallery">
+            [[+images]]
+        </div>
     </main>
 [[$scripts]]
 </body>

@@ -30,12 +30,18 @@
             background: #010000;
             font-size: 16px;
         }
-
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 200;
+        }
         h1 {
             color: [[++site_css.sepia]];
             font-family: 'Lato', sans-serif;
             font-size: 3rem;
-            font-weight: 200;
         }
 
         a {
