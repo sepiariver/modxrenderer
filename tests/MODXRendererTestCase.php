@@ -126,6 +126,11 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
             }
         }
         $this->assertEquals(7, $success);
+        $edgeCases = [];
+        $renderer->collectElementTags('[[ [[', $edgeCases);
+        $this->assertEquals(0, count($edgeCases));
+        $renderer->collectElementTags('[[+outer[[+inner]]]]', $edgeCases);
+        $this->assertEquals(1, count($edgeCases));
     }
     /**
      * @test render template
@@ -255,7 +260,10 @@ Test Uncacheable Tag: [[!+uncacheable_tag]]
      */
     public function testProcessChunkTag(MODXChunkTag $chunk)
     {
-        $properties = ['test_prop' => 'test_value'];
+        $properties = [
+            'test_prop' => 'test_value',
+            'parse_props_value_key' => ['value' => 'tested'],
+        ];
         $content = '[[+test_prop]]';
         $result = $chunk->process($properties, $content);
         $this->assertEquals($result, $properties['test_prop']);
@@ -365,4 +373,5 @@ Test Uncacheable Tag: [[!+uncacheable_tag]]
         $renderer->setProcessingElement('yes');
         $this->assertEquals(true, $renderer->isProcessingElement());
     }
+
 }

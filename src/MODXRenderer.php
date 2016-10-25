@@ -211,7 +211,7 @@ class MODXRenderer extends MODXParser
         $content = file_get_contents($template);
         // Placeholders were set in constructor. Merge with live data.
         $this->data = array_merge($this->data, $data);
-        $this->processElementTags('', $content, true, false, '[[', ']]', array(), 10);
+        $this->processElementTags('', $content, true, true, '[[', ']]', array(), 10);
         echo $content;
     }
  }
