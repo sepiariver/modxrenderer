@@ -267,6 +267,7 @@ Test Uncacheable Tag: [[!+uncacheable_tag]]
         $chunk = new MODXChunkTag($parser);
         $chunk->set('name','testChunkEmpty');
         $this->assertEquals("", $chunk->getContent());
+        // This method is kinda dumb but we'll test it anyways
         $chunk->setContent('test');
         $this->assertEquals('test', $chunk->get('name'));
         return $chunk;
@@ -314,6 +315,20 @@ Test Uncacheable Tag: [[!+uncacheable_tag]]
 
         $this->assertEquals(trim($response->getBody()->__toString()), 'Chunk with prop string: MODXRenderer Test Chunk Prop String: MODXRenderer Test Suite');
 
+    }
+    /**
+     * @test render toplaceholders w object
+     * @depends testConstructRenderer
+     *
+     */
+    public function testRenderToPlaceholders(MODXRenderer $renderer) {
+        $obj = (object) array(
+            'test_object_to' => 'placeholders',
+            'nested_object_ph' => ['inside nested object' => 'is a nested value'],
+        );
+        $renderer->toPlaceholders($obj);
+        $this->assertEquals('placeholders', $renderer->data['test_object_to']);
+        $this->assertEquals('is a nested value', $renderer->data['nested_object_ph.inside nested object']);
     }
 
 }

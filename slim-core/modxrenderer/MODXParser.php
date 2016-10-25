@@ -477,11 +477,9 @@ class MODXParser {
                     if ($elementOutput === null) {
                         $tagName= substr($tagName, 1 + $tokenOffset);
                         switch ($token) {
-
                             case '$':
                                 $element= new MODXChunkTag($this);
                                 break;
-
                             case '+':
                             default:
                                 $element= new MODXPlaceholderTag($this);
@@ -490,11 +488,13 @@ class MODXParser {
                         $element->set('name', $tagName);
                         $element->setTag($outerTag);
                         $elementOutput= $element->process($tagPropString);
-
                     }
+                    // @codeCoverageIgnoreStart
+                    // @TODO figure out how to make this path happen?
                     if (($elementOutput === null || $elementOutput === false) && $outerTag !== $tag[0]) {
                         $elementOutput = $outerTag;
                     }
+                    // @codeCoverageIgnoreEnd
                     /* Debug uses modx methods:
                     if ($this->modx->getDebug() === true) {
                         $this->modx->log(xPDO::LOG_LEVEL_DEBUG, "Processing {$outerTag} as {$innerTag} using tagname {$tagName}:\n" . print_r($elementOutput, 1) . "\n\n");
@@ -510,6 +510,8 @@ class MODXParser {
          *
          * @param string $unfiltered The unfiltered name of a {@link modElement}.
          * @return string The name minus any filter modifiers.
+         * @codeCoverageIgnore
+         * @TODO: output filters
          */
         public function realname($unfiltered) {
             $filtered= $unfiltered;
@@ -734,9 +736,11 @@ class MODXParser {
                             $tmp= trim(substr($str, $searchPos, $i - $searchPos));
                             if (!empty($tmp)) {
                                 $split[]= $tmp;
+                                // @codeCoverageIgnoreStart
                                 if ($limit > 0 && count($split) >= $limit) {
                                     break;
                                 }
+                                // @codeCoverageIgnoreEnd
                             }
                             $searchPos = $i + 1;
                         }

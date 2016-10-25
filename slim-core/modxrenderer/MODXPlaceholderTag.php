@@ -69,7 +69,9 @@ class MODXPlaceholderTag extends MODXTag {
     public function getContent(array $options = array()) {
         if (!is_string($this->_content)) {
             if (isset($options['content'])) {
+                // @codeCoverageIgnoreStart
                 $this->_content = $options['content'];
+                // @codeCoverageIgnoreEnd
             } elseif (isset($this->parser->data[$this->get('name')])) {
                 $this->_content = $this->parser->data[$this->get('name')];
             } else {
@@ -83,6 +85,7 @@ class MODXPlaceholderTag extends MODXTag {
      * MODXPlaceholderTag instances cannot be cacheable.
      *
      * @return boolean Always returns false.
+     * @codeCoverageIgnore
      */
     public function isCacheable() {
         return false;

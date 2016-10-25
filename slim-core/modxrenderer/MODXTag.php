@@ -254,6 +254,7 @@ abstract class MODXTag {
      * accept language, revision identifiers, or other information to alter the
      * behavior of the method.
      * @return string The raw source content for the element.
+     * @codeCoverageIgnore
     */
     public function getContent(array $options = array()) {
         if (!$this->isCacheable() || !is_string($this->_content) || $this->_content === '') {
