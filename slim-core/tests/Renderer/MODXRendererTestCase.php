@@ -278,8 +278,11 @@ Test Uncacheable Tag: [[!+uncacheable_tag]]
      */
     public function testParserGetChunk(MODXParser $parser) {
 
-        $result = $parser->getChunk('testChunkPropString', array('prop_string' => 'testing getChunk'));
-        $this->assertEquals("MODXRenderer Test Chunk Prop String: testing getChunk
+        $result = $parser->getChunk('testChunkPropString', array(
+            'prop_string' => 'testing getChunk',
+            'prop_string2' => 'prop string with amp; in key'
+        ));
+        $this->assertEquals("MODXRenderer Test Chunk Prop String: testing getChunkprop string with amp; in key
 ", $result);
     }
     /**
@@ -313,7 +316,7 @@ Test Uncacheable Tag: [[!+uncacheable_tag]]
         $response = new Response();
         $renderer->render($response, 'testChunkPropString.tpl');
 
-        $this->assertEquals(trim($response->getBody()->__toString()), 'Chunk with prop string: MODXRenderer Test Chunk Prop String: MODXRenderer Test Suite');
+        $this->assertEquals(trim($response->getBody()->__toString()), 'Chunk with prop string: MODXRenderer Test Chunk Prop String: MODXRenderer Test Suiteprop string with amp value');
 
     }
     /**
@@ -330,5 +333,31 @@ Test Uncacheable Tag: [[!+uncacheable_tag]]
         $this->assertEquals('placeholders', $renderer->data['test_object_to']);
         $this->assertEquals('is a nested value', $renderer->data['nested_object_ph.inside nested object']);
     }
-
+    /**
+     * @test render setplaceholders
+     * @depends testConstructRenderer
+     *
+     */
+    public function testRenderSetPlaceholders(MODXRenderer $renderer) {
+        $obj = (object) array(
+            'test_object_set' => 'placeholders',
+            'flat_object' => 'scalar values',
+        );
+        $renderer->setPlaceholders($obj);
+        $this->assertEquals('placeholders', $renderer->data['test_object_set']);
+        $this->assertEquals('scalar values', $renderer->data['flat_object']);
+        $renderer->unsetPlaceholders('flat_object');
+        $this->assertArrayNotHasKey('flat_object', $renderer->data);
+    }
+    /**
+     * @test render set processing
+     * @depends testConstructRenderer
+     *
+     */
+    public function testRenderSetProcessing(MODXRenderer $renderer) {
+        $renderer->setProcessingElement(null);
+        $this->assertEquals(false, $renderer->isProcessingElement());
+        $renderer->setProcessingElement('yes');
+        $this->assertEquals(true, $renderer->isProcessingElement());
+    }
 }

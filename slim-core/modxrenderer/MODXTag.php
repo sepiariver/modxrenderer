@@ -183,9 +183,11 @@ abstract class MODXTag {
             $tag.= ']]';
             $this->_tag = $tag;
         }
+// @codeCoverageIgnoreStart
         if (empty($this->_tag)) {
             //$this->modx->log(xPDO::LOG_LEVEL_ERROR, 'Instance of ' . get_class($this) . ' produced an empty tag!');
         }
+// @codeCoverageIgnoreEnd
         return $this->_tag;
     }
 

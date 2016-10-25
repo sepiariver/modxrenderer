@@ -131,6 +131,7 @@ class MODXParser {
                 $offset= 0;
                 $openPos= 0;
                 $closePos= 0;
+
                 if (($startPos= strpos($origContent, $prefix)) === false) {
                     return $matchCount;
                 }
@@ -138,6 +139,7 @@ class MODXParser {
                 if (($stopPos= strrpos($origContent, $suffix)) === false) {
                     return $matchCount;
                 }
+
                 $stopPos= $stopPos + strlen($suffix);
                 $length= $stopPos - $startPos;
                 $content= $origContent;
@@ -146,9 +148,11 @@ class MODXParser {
                     $content= substr($content, $startPos);
                     $openPos= 0;
                     $offset= strlen($prefix);
+
                     if (($closePos= strpos($content, $suffix, $offset)) === false) {
                         break;
                     }
+
                     $nextOpenPos= strpos($content, $prefix, $offset);
                     while ($nextOpenPos !== false && $nextOpenPos < $closePos) {
                         $openCount++;
@@ -193,8 +197,8 @@ class MODXParser {
                 $this->modx->cacheManager->writeFile(MODX_CORE_PATH . 'logs/parser.log', print_r($matches, 1) . "\n", 'a'); */
 
             return $matchCount;
-        }
 
+        }
 
                 /**
                  * Collects and processes any set of tags as defined by a prefix and suffix.
@@ -240,7 +244,7 @@ class MODXParser {
                                     $tagMap[$tag[0]]= '';
                                 }
                             }
-                            // @codeCoverageIgnoreStart
+
                             elseif (!empty ($tokens) && !in_array($token, $tokens)) {
                                 $collected--;
                                 continue;
@@ -250,7 +254,7 @@ class MODXParser {
                                 $processed++;
                                 continue;
                             }
-                            // @codeCoverageIgnoreEnd
+
                             $tagOutput= $this->processTag($tag, $processUncacheable);
 
                             if (($tagOutput === null || $tagOutput === false) && $removeUnprocessed) {
@@ -332,17 +336,15 @@ class MODXParser {
                         $property= $this->escSplit('=', $prop);
                         if (count($property) == 2) {
                             $propName= $property[0];
-                            // @codeCoverageIgnoreStart
                             if (substr($propName, 0, 4) == "amp;") {
                                 $propName= substr($propName, 4);
                             }
-                            // @codeCoverageIgnoreEnd
                             $propValue= $property[1];
                             $propType= 'textfield';
                             $propDesc= '';
                             $propOptions= array();
                             $pvTmp= $this->escSplit(';', $propValue);
-                            // @codeCoverageIgnoreStart
+// @codeCoverageIgnoreStart
                             if ($pvTmp && isset ($pvTmp[1])) {
                                 $propDesc= $pvTmp[0];
                                 if (($pvTmp[1]=='list' || $pvTmp[1]=='combo') && isset($pvTmp[3]) && $pvTmp[3]) {
@@ -364,15 +366,16 @@ class MODXParser {
                                     $propValue = $pvTmp[0];
                                 }
                             }
-                            // @codeCoverageIgnoreEnd
+// @codeCoverageIgnoreEnd
                             if ($propValue[0] == '`' && $propValue[strlen($propValue) - 1] == '`') {
                                 $propValue= substr($propValue, 1, strlen($propValue) - 2);
                             }
                             $propValue= str_replace("``", "`", $propValue);
                             if ($valuesOnly) {
                                 $properties[$propName]= $propValue;
-                            } else {
-                                // @codeCoverageIgnoreStart
+                            }
+// @codeCoverageIgnoreStart
+                            else {
                                 $properties[$propName]= array(
                                     'name' => $propName,
                                     'desc' => $propDesc,
@@ -380,8 +383,8 @@ class MODXParser {
                                     'options' => $propOptions,
                                     'value' => $propValue
                                 );
-                                // @codeCoverageIgnoreEnd
                             }
+// @codeCoverageIgnoreEnd
                         }
                     }
                     return $properties;
@@ -439,6 +442,7 @@ class MODXParser {
                     $innerTag= $tag[1];
 
                     /* Avoid all processing for comment tags, e.g. [[- comments here]] */
+
                     if (substr($innerTag, 0, 1) === '-') {
                         return "";
                     }
@@ -459,10 +463,12 @@ class MODXParser {
                     $tokenOffset= 0;
                     $cacheable= true;
                     if ($token === '!') {
+
                         if (!$processUncacheable) {
                             $this->_processingTag = false;
                             return $outerTag;
                         }
+
                         $cacheable= false;
                         $tokenOffset++;
                         $token= substr($tagName, $tokenOffset, 1);
@@ -476,6 +482,7 @@ class MODXParser {
 
                     if ($elementOutput === null) {
                         $tagName= substr($tagName, 1 + $tokenOffset);
+
                         switch ($token) {
                             case '$':
                                 $element= new MODXChunkTag($this);
@@ -485,16 +492,17 @@ class MODXParser {
                                 $element= new MODXPlaceholderTag($this);
                                 break;
                         }
+
                         $element->set('name', $tagName);
                         $element->setTag($outerTag);
                         $elementOutput= $element->process($tagPropString);
                     }
-                    // @codeCoverageIgnoreStart
                     // @TODO figure out how to make this path happen?
+
                     if (($elementOutput === null || $elementOutput === false) && $outerTag !== $tag[0]) {
                         $elementOutput = $outerTag;
                     }
-                    // @codeCoverageIgnoreEnd
+
                     /* Debug uses modx methods:
                     if ($this->modx->getDebug() === true) {
                         $this->modx->log(xPDO::LOG_LEVEL_DEBUG, "Processing {$outerTag} as {$innerTag} using tagname {$tagName}:\n" . print_r($elementOutput, 1) . "\n\n");
@@ -736,11 +744,11 @@ class MODXParser {
                             $tmp= trim(substr($str, $searchPos, $i - $searchPos));
                             if (!empty($tmp)) {
                                 $split[]= $tmp;
-                                // @codeCoverageIgnoreStart
+
                                 if ($limit > 0 && count($split) >= $limit) {
                                     break;
                                 }
-                                // @codeCoverageIgnoreEnd
+
                             }
                             $searchPos = $i + 1;
                         }
