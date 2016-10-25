@@ -15,8 +15,8 @@ use Slim\Http\Response;
 class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
 {
 
-    const APP_CORE_PATH = '/Volumes/Media/_git/sr_modxrenderer/slim-core/';
-    const PUBLIC_BASE_PATH = '/Volumes/Media/_git/sr_modxrenderer/public/';
+    const APP_CORE_PATH = '/Volumes/Media/_git/sr_modxrenderer/';
+    const PUBLIC_BASE_PATH = '/Volumes/Media/_git/sr_modxrenderer/docs/';
     const SITE_URL = 'http://modxrenderer.local/';
 
     public static $siteSettings = array(
@@ -27,21 +27,17 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
      * @test constructor
      * @expectedException InvalidArgumentException
      */
-    public function testConstructRendererFailure () {
-
-        require self::APP_CORE_PATH . 'vendor/autoload.php';
+    public function testConstructRendererFailure ()
+    {
         // expectedException
         $renderer = new MODXRenderer([],[]);
-
     }
 
     /**
      * @test constructor
      */
-    public function testConstructRenderer () {
-
-        require self::APP_CORE_PATH . 'vendor/autoload.php';
-
+    public function testConstructRenderer () 
+    {
         $rendererSettings = array(
             'template_path' => self::APP_CORE_PATH . 'tests/Renderer/templates/',
             'chunk_path' => self::APP_CORE_PATH . 'tests/Renderer/chunks/',
@@ -55,12 +51,14 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
 
         return $renderer;
     }
+    
     /**
      * @test render fetch fail data
      * @depends testConstructRenderer
      * @expectedException InvalidArgumentException
      */
-    public function testRenderFetchFailData(MODXRenderer $renderer) {
+    public function testRenderFetchFailData(MODXRenderer $renderer) 
+    {
         $renderer->fetch('testTemplate.tpl', ['template' => 'this causes error']);
     }
     /**
