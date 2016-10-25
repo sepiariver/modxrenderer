@@ -1,7 +1,7 @@
 <phpunit bootstrap="/Volumes/Media/_git/sr_modxrenderer/vendor/autoload.php">
     <filter>
       <whitelist processUncoveredFilesFromWhitelist="true">
-        <directory suffix=".php">/Volumes/Media/_git/sr_modxrenderer/slim-core/modxrenderer</directory>
+        <directory suffix=".php">/Volumes/Media/_git/sr_modxrenderer/src</directory>
       </whitelist>
     </filter>
     <logging>
