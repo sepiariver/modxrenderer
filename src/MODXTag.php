@@ -5,105 +5,123 @@
  * @abstract You must implement the process() method on derivatives to implement
  * a parseable element tag.  All element tags are identified by a unique single
  * character token at the beginning of the tag string.
- *
  */
+
 namespace MODXRenderer;
 
-use MODXRenderer\MODXParser;
-
-abstract class MODXTag {
+abstract class MODXTag
+{
     /**
-     * A reference to the MODXParser
-     * @var MODXParser $parser
+     * A reference to the MODXParser.
+     *
+     * @var MODXParser
      */
     public $parser = null;
     /**
-     * The name of the tag
-     * @var string $name
+     * The name of the tag.
+     *
+     * @var string
      */
     public $name;
     /**
-     * The properties on the tag
-     * @var array $properties
+     * The properties on the tag.
+     *
+     * @var array
      */
     public $properties;
     /**
-     * The content of the tag
-     * @var string $_content
+     * The content of the tag.
+     *
+     * @var string
      */
-    public $_content= null;
+    public $_content = null;
     /**
-     * The processed output of the tag
-     * @var string $_output
+     * The processed output of the tag.
+     *
+     * @var string
      */
-    public $_output= '';
+    public $_output = '';
     /**
-     * The result of processing the tag
-     * @var bool $_result
+     * The result of processing the tag.
+     *
+     * @var bool
      */
-    public $_result= true;
+    public $_result = true;
     /**
-     * Just the isolated properties part of the tag string
-     * @var string $_propertyString
+     * Just the isolated properties part of the tag string.
+     *
+     * @var string
      */
-    public $_propertyString= '';
+    public $_propertyString = '';
     /**
-     * The arranged properties array for this tag
-     * @var array $_properties
+     * The arranged properties array for this tag.
+     *
+     * @var array
      */
-    public $_properties= array();
+    public $_properties = array();
     /**
-     * Whether or not the tag has been processed
-     * @var boolean $_processed
+     * Whether or not the tag has been processed.
+     *
+     * @var bool
      */
-    public $_processed= false;
+    public $_processed = false;
     /**
-     * The tag string
-     * @var string $_tag
+     * The tag string.
+     *
+     * @var string
      */
-    public $_tag= '';
+    public $_tag = '';
     /**
-     * The tag initial token ($,%,*,etc)
-     * @var string $_token
+     * The tag initial token ($,%,*,etc).
+     *
+     * @var string
      */
-    public $_token= '';
+    public $_token = '';
     /**
-     * Fields on the tag
-     * @var array $_fields
+     * Fields on the tag.
+     *
+     * @var array
      */
-    public $_fields= array(
+    public $_fields = array(
         'name' => '',
-        'properties' => ''
+        'properties' => '',
     );
     /**
-     * Whether or not this tag is marked as cacheable
-     * @var boolean $_cacheable
+     * Whether or not this tag is marked as cacheable.
+     *
+     * @var bool
      */
-    public $_cacheable= true;
+    public $_cacheable = true;
     /**
-     * Any output/input filters on this tag
-     * @var array $_filters
+     * Any output/input filters on this tag.
+     *
+     * @var array
      */
-    public $_filters= array('input' => null, 'output' => null);
+    public $_filters = array('input' => null, 'output' => null);
 
     /**
      * Set a reference to the modX object, load the name and properties, and instantiate the tag class instance.
+     *
      * @param MODXParser $parser A reference to the MODXRenderer\MODXParser object
      */
-    function __construct(MODXParser $parser) {
+    public function __construct(MODXParser $parser)
+    {
         $this->parser = $parser;
-        $this->name =& $this->_fields['name'];
-        $this->properties =& $this->_fields['properties'];
+        $this->name = &$this->_fields['name'];
+        $this->properties = &$this->_fields['properties'];
     }
 
     /**
      * Generic getter method for MODXTag attributes.
      *
      * @see xPDOObject::get()
-     * @param string $k The field key.
-     * @return mixed The value of the field or null if it is not set.
+     *
+     * @param string $k The field key
+     *
+     * @return mixed The value of the field or null if it is not set
      */
-    public function get($k) {
+    public function get($k)
+    {
         $value = null;
         if (array_key_exists($k, $this->_fields)) {
             if ($k == 'properties') {
@@ -114,47 +132,54 @@ abstract class MODXTag {
                 $value = $this->_fields[$k];
             }
         }
+
         return $value;
     }
     /**
      * Generic setter method for MODXTag attributes.
      *
      * @see xPDOObject::set()
-     * @param string $k The field key.
-     * @param mixed $v The value to assign to the field.
+     *
+     * @param string $k The field key
+     * @param mixed  $v The value to assign to the field
      */
-    public function set($k, $v) {
+    public function set($k, $v)
+    {
         if ($k === 'properties') {
             $v = is_array($v) ? serialize($v) : $v;
         }
         $this->_fields[$k] = $v;
-        return ($this->_fields[$k] === $v);
+
+        return $this->_fields[$k] === $v;
     }
 
     /**
-     * Returns the current token for the tag
+     * Returns the current token for the tag.
      *
      * @return string The token for the tag
      */
-    public function getToken() {
+    public function getToken()
+    {
         return $this->_token;
     }
 
     /**
      * Setter method for the token class var.
      *
-     * @param string $token The token to use for this element tag.
+     * @param string $token The token to use for this element tag
      */
-    public function setToken($token) {
+    public function setToken($token)
+    {
         $this->_token = $token;
     }
 
     /**
      * Setter method for the tag class var.
      *
-     * @param string $tag The tag to use for this element.
+     * @param string $tag The tag to use for this element
      */
-    public function setTag($tag) {
+    public function setTag($tag)
+    {
         $this->_tag = $tag;
     }
 
@@ -163,24 +188,25 @@ abstract class MODXTag {
      *
      * @return string
      */
-    public function getTag() {
+    public function getTag()
+    {
         if (empty($this->_tag) && ($name = $this->get('name'))) {
             $propTemp = array();
             if (empty($this->_propertyString) && !empty($this->_properties)) {
-                while(list($key, $value) = each($this->_properties)) {
-                    $propTemp[] = trim($key) . '=`' . $value . '`';
+                while (list($key, $value) = each($this->_properties)) {
+                    $propTemp[] = trim($key).'=`'.$value.'`';
                 }
                 if (!empty($propTemp)) {
-                    $this->_propertyString = '?' . implode('&', $propTemp);
+                    $this->_propertyString = '?'.implode('&', $propTemp);
                 }
             }
             $tag = '[[';
-            $tag.= $this->getToken();
-            $tag.= $name;
+            $tag .= $this->getToken();
+            $tag .= $name;
             if (!empty($this->_propertyString)) {
-                $tag.= $this->_propertyString;
+                $tag .= $this->_propertyString;
             }
-            $tag.= ']]';
+            $tag .= ']]';
             $this->_tag = $tag;
         }
 // @codeCoverageIgnoreStart
@@ -195,27 +221,29 @@ abstract class MODXTag {
      * Process the tag and return the result.
      *
      * @see modElement::process()
+     *
      * @param array|string $properties An array of properties or a formatted
-     * property string.
-     * @param string $content Optional content to use for the element
-     * processing.
-     * @return mixed The result of processing the tag.
+     *                                 property string
+     * @param string       $content    Optional content to use for the element
+     *                                 processing
+     *
+     * @return mixed The result of processing the tag
      */
-    public function process($properties= null, $content= null) {
-
+    public function process($properties = null, $content = null)
+    {
         $this->parser->setProcessingElement(true);
         $this->getProperties($properties);
 
         $this->getTag();
         $this->getContent(is_string($content) ? array('content' => $content) : array());
+
         return $this->_result;
     }
-
 
     /**
      * Get an output filter instance configured for this Element.
      *
-     * @return modOutputFilter|null An output filter instance (or null if one cannot be loaded).
+     * @return modOutputFilter|null An output filter instance (or null if one cannot be loaded)
      */
     /* TODO: support output filters
     public function & getOutputFilter() {
@@ -253,12 +281,14 @@ abstract class MODXTag {
      * Get the raw source content of the tag element.
      *
      * @param array $options An array of options implementations can use to
-     * accept language, revision identifiers, or other information to alter the
-     * behavior of the method.
-     * @return string The raw source content for the element.
+     *                       accept language, revision identifiers, or other information to alter the
+     *                       behavior of the method
+     *
+     * @return string The raw source content for the element
      * @codeCoverageIgnore
-    */
-    public function getContent(array $options = array()) {
+     */
+    public function getContent(array $options = array())
+    {
         if (!$this->isCacheable() || !is_string($this->_content) || $this->_content === '') {
             if (isset($options['content'])) {
                 $this->_content = $options['content'];
@@ -266,6 +296,7 @@ abstract class MODXTag {
                 $this->_content = $this->get('name');
             }
         }
+
         return $this->_content;
     }
 
@@ -273,45 +304,52 @@ abstract class MODXTag {
      * Set the raw source content for the tag element.
      *
      * @param string $content The content to set
-     * @param array $options Ignored.
-     * @return boolean
+     * @param array  $options Ignored
+     *
+     * @return bool
      */
-    public function setContent($content, array $options = array()) {
+    public function setContent($content, array $options = array())
+    {
         return $this->set('name', $content);
     }
 
     /**
      * Get the properties for this element instance for processing.
      *
-     * @param array|string $properties An array or string of properties to apply.
-     * @return array A simple array of properties ready to use for processing.
+     * @param array|string $properties An array or string of properties to apply
+     *
+     * @return array A simple array of properties ready to use for processing
      */
-    public function getProperties($properties = null) {
-        $this->_properties= $this->parser->parseProperties($this->get('properties'));
+    public function getProperties($properties = null)
+    {
+        $this->_properties = $this->parser->parseProperties($this->get('properties'));
         /*TODO: $set= $this->getPropertySet();
         if (!empty($set)) {
             $this->_properties= array_merge($this->_properties, $set);
         }*/
 
         if (!empty($properties)) {
-            $this->_properties= array_merge($this->_properties, $this->parser->parseProperties($properties));
+            $this->_properties = array_merge($this->_properties, $this->parser->parseProperties($properties));
         }
 
         if (!empty($this->parser->data)) {
             $this->_properties = array_merge($this->_properties, $this->parser->parseProperties($this->parser->data));
         }
+
         return $this->_properties;
     }
 
     /**
      * Set default properties for this element instance.
      *
-     * @param array|string $properties A property array or property string.
-     * @param boolean $merge Indicates if properties should be merged with
-     * existing ones.
-     * @return boolean true if the properties are set.
+     * @param array|string $properties A property array or property string
+     * @param bool         $merge      Indicates if properties should be merged with
+     *                                 existing ones
+     *
+     * @return bool true if the properties are set
      */
-    public function setProperties($properties, $merge = false) {
+    public function setProperties($properties, $merge = false)
+    {
         $set = false;
         $propertyArray = array();
         if (is_string($properties)) {
@@ -343,7 +381,7 @@ abstract class MODXTag {
                         'desc' => '',
                         'type' => 'textfield',
                         'options' => array(),
-                        'value' => $property
+                        'value' => $property,
                     );
                 }
             }
@@ -355,32 +393,35 @@ abstract class MODXTag {
             }
             $set = $this->set('properties', $propertyArray);
         }
+
         return $set;
     }
 
     /**
      * Indicates if the element is cacheable.
      *
-     * @return boolean True if the element can be stored to or retrieved from
-     * the element cache.
+     * @return bool True if the element can be stored to or retrieved from
+     *              the element cache
      * @codeCoverageIgnore
      */
-    public function isCacheable() {
+    public function isCacheable()
+    {
         return $this->_cacheable;
     }
 
     /**
      * Sets the runtime cacheability of the element.
      *
-     * @param boolean $cacheable Indicates the value to set for cacheability of
-     * this element.
+     * @param bool $cacheable Indicates the value to set for cacheability of
+     *                        this element
      * @codeCoverageIgnore
      */
-    public function setCacheable($cacheable = true) {
-        $this->_cacheable = (boolean) $cacheable;
+    public function setCacheable($cacheable = true)
+    {
+        $this->_cacheable = (bool) $cacheable;
     }
 
-    /**
+    /*
      * Gets a named property set to use with this MODXTag instance.
      *
      * This function will attempt to extract a setName from the tag name using the

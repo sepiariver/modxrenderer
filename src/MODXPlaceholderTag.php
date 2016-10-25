@@ -4,20 +4,19 @@
  *
  * [[+placeholder_key]] Represents a placeholder with name placeholder_key.
  *
- * @uses modX::getPlaceholder() To retrieve the placeholder value.
- * @package modx
+ * @uses modX::getPlaceholder() To retrieve the placeholder value
  */
+
 namespace MODXRenderer;
 
-use MODXRenderer\MODXTag;
-use MODXRenderer\MODXParser;
-
-class MODXPlaceholderTag extends MODXTag {
+class MODXPlaceholderTag extends MODXTag
+{
     /**
      * Overrides MODXTag::__construct to set the Placeholder Tag token
      * {@inheritdoc}
      */
-    function __construct(MODXParser $parser, $maxIterations = 10) {
+    public function __construct(MODXParser $parser, $maxIterations = 10)
+    {
         parent :: __construct($parser);
         $this->setCacheable(false);
         $this->setToken('+');
@@ -33,12 +32,13 @@ class MODXPlaceholderTag extends MODXTag {
      *
      * {@inheritdoc}
      */
-    public function process($properties= null, $content= null) {
+    public function process($properties = null, $content = null)
+    {
         parent :: process($properties, $content);
         if (!$this->_processed) {
-            $this->_output= $this->_content;
+            $this->_output = $this->_content;
             if ($this->_output !== null && is_string($this->_output) && !empty($this->_output)) {
-                    /* collect element tags in the content and process them */
+                /* collect element tags in the content and process them */
 
                     $this->parser->processElementTags(
                         $this->_tag,
@@ -50,7 +50,7 @@ class MODXPlaceholderTag extends MODXTag {
                         array(),
                         $this->maxIterations
                     );
-                }
+            }
             if ($this->_output !== null || $this->parser->startedProcessingUncacheable()) {
                 //TODO: output filter support
                 //$this->filterOutput();
@@ -66,7 +66,8 @@ class MODXPlaceholderTag extends MODXTag {
      *
      * {@inheritdoc}
      */
-    public function getContent(array $options = array()) {
+    public function getContent(array $options = array())
+    {
         if (!is_string($this->_content)) {
             if (isset($options['content'])) {
                 // @codeCoverageIgnoreStart
@@ -78,16 +79,18 @@ class MODXPlaceholderTag extends MODXTag {
                 $this->_content = null;
             }
         }
+
         return $this->_content;
     }
 
     /**
      * MODXPlaceholderTag instances cannot be cacheable.
      *
-     * @return boolean Always returns false.
+     * @return bool Always returns false
      * @codeCoverageIgnore
      */
-    public function isCacheable() {
+    public function isCacheable()
+    {
         return false;
     }
 
@@ -96,5 +99,7 @@ class MODXPlaceholderTag extends MODXTag {
      *
      * {@inheritdoc}
      */
-    public function setCacheable($cacheable = true) {}
+    public function setCacheable($cacheable = true)
+    {
+    }
 }
