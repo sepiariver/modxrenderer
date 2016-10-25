@@ -1,8 +1,2 @@
 /cache/
-/slim-core/cache/
 /vendor/
-/slim-core/vendor/
-/logs/*
-/slim-core/logs/*
-!/logs/README.md
-!/slim-core/logs/README.md
