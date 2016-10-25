@@ -36,11 +36,11 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @test constructor
      */
-    public function testConstructRenderer () 
+    public function testConstructRenderer ()
     {
         $rendererSettings = array(
-            'template_path' => self::APP_CORE_PATH . 'tests/Renderer/templates/',
-            'chunk_path' => self::APP_CORE_PATH . 'tests/Renderer/chunks/',
+            'template_path' => self::APP_CORE_PATH . 'tests/templates/',
+            'chunk_path' => self::APP_CORE_PATH . 'tests/chunks/',
         );
 
         $renderer = new MODXRenderer($rendererSettings, self::$siteSettings);
@@ -51,13 +51,13 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
 
         return $renderer;
     }
-    
+
     /**
      * @test render fetch fail data
      * @depends testConstructRenderer
      * @expectedException InvalidArgumentException
      */
-    public function testRenderFetchFailData(MODXRenderer $renderer) 
+    public function testRenderFetchFailData(MODXRenderer $renderer)
     {
         $renderer->fetch('testTemplate.tpl', ['template' => 'this causes error']);
     }
@@ -111,7 +111,7 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
      * @depends testConstructRenderer
      */
     public function testRenderCollectTags(MODXRenderer $renderer) {
-        $content = file_get_contents(self::APP_CORE_PATH . 'tests/Renderer/templates/testCollectElements.tpl');
+        $content = file_get_contents(self::APP_CORE_PATH . 'tests/templates/testCollectElements.tpl');
         $result = [];
         $renderer->collectElementTags($content, $result);
         //var_dump($result);
@@ -180,7 +180,7 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
      * @depends testConstructRenderer
      */
     public function testParserProcessElementTags(MODXRenderer $renderer) {
-        $content = file_get_contents(self::APP_CORE_PATH . 'tests/Renderer/templates/testProcessElements.tpl');
+        $content = file_get_contents(self::APP_CORE_PATH . 'tests/templates/testProcessElements.tpl');
         $content1 = $content;
         $content2 = $content;
         $content3 = $content;
