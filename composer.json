@@ -1,9 +1,9 @@
 {
     "name": "MODXRenderer",
-    "description": "",
-    "keywords": [],
-    "homepage": "http://github.com/sepiariver/modxrenderer",
-    "license": "MIT",
+    "description": "The MODX Revolution parser unit tested and refactored for use with Slim or other frameworks.",
+    "keywords": ["MODX","template","Slim"],
+    "homepage": "https://github.com/sepiariver/modxrenderer",
+    "license": "GPL",
     "authors": [{
         "name": "YJ Tso",
         "email": "info@sepiariver.com",
