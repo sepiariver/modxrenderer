@@ -38,6 +38,7 @@ class MODXRendererTestCase extends \PHPUnit_Framework_TestCase
         $rendererSettings = array(
             'template_path' => self::APP_CORE_PATH.'tests/templates/',
             'chunk_path' => self::APP_CORE_PATH.'tests/chunks/',
+            'site_prefix' => '+',
         );
 
         $renderer = new MODXRenderer($rendererSettings, self::$siteSettings);
@@ -350,6 +351,8 @@ Test Uncacheable Tag: [[!+uncacheable_tag]]
         $this->assertEquals('scalar values', $renderer->data['flat_object']);
         $renderer->unsetPlaceholders('flat_object');
         $this->assertArrayNotHasKey('flat_object', $renderer->data);
+        $renderer->unsetPlaceholders(array(['test_object_set','flat_object']));
+        $this->assertArrayNotHasKey('test_object_set', $renderer->data);
     }
     /**
      * @test render set processing
