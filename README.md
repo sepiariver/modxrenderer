@@ -20,7 +20,24 @@ cd modxrenderer
 composer install # optionally --no-dev --no-scripts
 ```
 
+## Usage
 
+### render()
 
+The way to use MODXRenderer in a Slim app is to call the `render()` method, which takes a PSR-compliant `Response` object, and a template name.
+
+Example:
+
+```
+$renderer = $this->get('renderer'); // from DI Container
+$renderer->render($response, 'myView.tpl');
+```
+
+Optionally you can pass in an array of data with which to populate placeholders in the template.
+
+```
+$args = $myDataLayer->getDataArray();
+$renderer->render($response, 'myView.tpl', $args);
+```
 
 
