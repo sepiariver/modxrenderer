@@ -20,7 +20,7 @@ The current alpha release supports MODX "Chunk" tags and "Placeholder" tags. [Up
 
 - Familiar (and much-loved by the author) MODX template syntax in any application or PHP environment >= 5.6.
 - Self-contained parser functionality decoupled from the `$modx` container (or any container for that matter).
-- [Unit tested with > 95% coverage](https://sepiariver.github.io/modxrenderer/test-results/). (Some paths intentionally omitted due to inability to fabricate test case. Help on this would be appreciated.)
+- [Unit tested with > 95% coverage](https://sepiariver.github.io/modxrenderer/test-results/). Some paths intentionally omitted due to inability to fabricate test case, especially in the MODXParser class. Help on this would be appreciated. Feel free to [contact me](https://github.com/sepiariver/) even if it's just to tell me that this whole thing is a bad idea LOL.
 
 ## Installation
 

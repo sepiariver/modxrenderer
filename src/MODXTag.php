@@ -285,7 +285,7 @@ abstract class MODXTag
      *                       behavior of the method
      *
      * @return string The raw source content for the element
-     * @codeCoverageIgnore
+     * @codeCoverageIgnore subclasses override this
      */
     public function getContent(array $options = array())
     {
