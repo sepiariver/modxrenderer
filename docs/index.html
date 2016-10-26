@@ -1,0 +1,23 @@
+<h1 id="modxrenderer">MODXRenderer</h1>
+<p>MODXRenderer is modelled after Slim&#39;s PHP view renderer, and can be used in a Slim app as such. Alternatively it can modify any PSR-7 response object, or simply parse a string with MODX Revolution template syntax.</p>
+<p>The current beta release supports MODX &quot;Chunk&quot; tags and &quot;Placeholder&quot; tags.</p>
+<h2 id="why-">Why?</h2>
+<ul>
+<li>Familiar (and much-loved by the author) MODX template syntax in any application or PHP environment &gt;= 5.6.</li>
+<li>Isolated parser functionality decoupled from the <code>$modx</code> container (or any container for that matter).</li>
+<li>Unit tested with &gt; 95% coverage. (Some paths intentionally omitted due to inability to reproduce test case. Help on this would be appreciated.)</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>git&nbsp;clone&nbsp;</span><span class="markup underline link https hyperlink"><span>https://github.com/sepiariver/modxrenderer</span></span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>cd&nbsp;modxrenderer</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;</span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>composer&nbsp;install&nbsp;#&nbsp;optionally&nbsp;--no-dev&nbsp;--no-scripts</span></span></span></div></pre><h2 id="usage">Usage</h2>
+<h3 id="slim-di-container">Slim DI Container</h3>
+<p>When initializing MODXRenderer, the first argument is required—it must be an array with the following elements:</p>
+<ul>
+<li>&#39;template_path&#39; =&gt; absolute path to the filesystem location of your template files</li>
+<li>&#39;chunk_path&#39; =&gt; absolute path to the filesystem location of your &quot;Chunk&quot; template files</li>
+</ul>
+<p>In this example, an optional array of &quot;site settings&quot; is passed to the renderer. These values will be made globally-available in the parsed template and Chunks, via placeholders with a double &quot;++&quot; token.</p>
+<pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>$container[&#39;renderer&#39;]&nbsp;=&nbsp;function($c)&nbsp;{</span></span></span></div><div class="line"><span class="text plain"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="meta paragraph text"><span>$settings&nbsp;=&nbsp;$c-&gt;get(&#39;settings&#39;);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;new&nbsp;SepiaRiver\MODXRenderer($settings[&#39;renderer&#39;],&nbsp;$settings[&#39;site&#39;]);</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>};</span></span></span></div></pre><h3 id="render-">render()</h3>
+<p>The most predictable pattern in which to use MODXRenderer in a Slim app is to call the <code>render()</code> method in a route closure. The method takes a PSR-7 <code>Response</code> object, which the Slim route provides, and a template name.</p>
+<p>Example:</p>
+<pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>$renderer&nbsp;=&nbsp;$this-&gt;get(&#39;renderer&#39;);&nbsp;//&nbsp;from&nbsp;DI&nbsp;Container</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>$renderer-&gt;render($response,&nbsp;&#39;myView.tpl&#39;);</span></span></span></div></pre><p>Optionally you can pass in an array of data with which to populate placeholders in the template.</p>
+<pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>$args&nbsp;=&nbsp;$myDataLayer-&gt;getDataArray();</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>$renderer-&gt;render($response,&nbsp;&#39;myView.tpl&#39;,&nbsp;$args);</span></span></span></div></pre><p><em>NOTE: unlike the native MODX environment, the MODXRenderer does not include automatic input sanitization. Un-sanitized inputs, for example those from <code>$args</code> set in request parameters, can be reflected in the parsed content and pose a security risk. Take care to sanitize untrusted data before passing it to the view renderer.</em> </p>

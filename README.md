@@ -24,23 +24,23 @@ composer install # optionally --no-dev --no-scripts
 
 ### Slim DI Container
 
-When initializing the MODXRenderer, the first argument is required—it must be an array with the following required elements:
+When initializing MODXRenderer, the first argument is required—it must be an array with the following elements:
 
 - 'template_path' => absolute path to the filesystem location of your template files
 - 'chunk_path' => absolute path to the filesystem location of your "Chunk" template files
 
-In the following example, an array of "site settings" is passed to the renderer. These are globally available values, which will be populated into placeholders with a double "++" token.
+In this example, an optional array of "site settings" is passed to the renderer. These values will be made globally-available in the parsed template and Chunks, via placeholders with a double "++" token.
 
 ```
 $container['renderer'] = function($c) {
     $settings = $c->get('settings');
-    return new MODXRenderer\MODXRenderer($settings['renderer'], $settings['site']);
+    return new SepiaRiver\MODXRenderer($settings['renderer'], $settings['site']);
 };
 ```
 
 ### render()
 
-The way to use MODXRenderer in a Slim app is to call the `render()` method, which takes a PSR-7 `Response` object, and a template name.
+The most predictable pattern in which to use MODXRenderer in a Slim app is to call the `render()` method in a route closure. The method takes a PSR-7 `Response` object, which the Slim route provides, and a template name.
 
 Example:
 
@@ -56,4 +56,4 @@ $args = $myDataLayer->getDataArray();
 $renderer->render($response, 'myView.tpl', $args);
 ```
 
-
+_NOTE: unlike the native MODX environment, the MODXRenderer does not include automatic input sanitization. Un-sanitized inputs, for example those from `$args` set in request parameters, can be reflected in the parsed content and pose a security risk. Take care to sanitize untrusted data before passing it to the view renderer._
