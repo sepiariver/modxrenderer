@@ -29,7 +29,14 @@ When initializing the MODXRenderer, the first argument is required—it must be 
 - 'template_path' => absolute path to the filesystem location of your template files
 - 'chunk_path' => absolute path to the filesystem location of your "Chunk" template files
 
+In the following example, an array of "site settings" is passed to the renderer. These are globally available values, which will be populated into placeholders with a double "++" token.
 
+```
+$container['renderer'] = function($c) {
+    $settings = $c->get('settings');
+    return new MODXRenderer\MODXRenderer($settings['renderer'], $settings['site']);
+};
+```
 
 ### render()
 
