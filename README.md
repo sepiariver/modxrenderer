@@ -2,9 +2,18 @@
 
 MODXRenderer is modelled after Slim's PHP view renderer, and can be used in a Slim app as such. Alternatively it can modify any PSR-7 response object, or simply parse a string with MODX Revolution template syntax.
 
-The current beta release supports MODX "Chunk" tags and "Placeholder" tags.
+The current alpha release supports MODX "Chunk" tags and "Placeholder" tags. [Upcoming project milestones](https://github.com/sepiariver/modxrenderer/milestones) include:
 
-The project is managed on [Github](https://github.com/sepiariver/modxrenderer/). Documentation is rendered at: [https://sepiariver.github.io/modxrenderer/](https://sepiariver.github.io/modxrenderer/).
+- Output filter support
+- More testing
+- Property sets
+
+**Resources**
+
+- [Github repo](https://github.com/sepiariver/modxrenderer/)
+- [Documentation](https://sepiariver.github.io/modxrenderer/)
+- [Slim](http://www.slimframework.com/)
+- [MODX](https://modx.com/)
 
 ## Why?
 
@@ -39,6 +48,16 @@ $container['renderer'] = function($c) {
     return new SepiaRiver\MODXRenderer($settings['renderer'], $settings['site']);
 };
 ```
+Nested arrays can be passed in, which will be converted to MODX Placeholder Tags with dot notation syntax:
+
+```
+$settings['site'] = array(
+    'nested' => array(
+        'setting' => 'value',
+        ),
+);
+// Will populate placeholder tag [[++nested.setting]] with the string 'value'
+```
 
 ### render()
 
@@ -50,8 +69,7 @@ Example:
 $renderer = $this->get('renderer'); // from DI Container
 $renderer->render($response, 'myView.tpl');
 ```
-
-Optionally you can pass in an array of data with which to populate placeholders in the template.
+The template must exist in the `template_path` filesystem location. Optionally you can pass in an array of data with which to populate placeholders in the template.
 
 ```
 $args = $myDataLayer->getDataArray();
@@ -62,9 +80,33 @@ _NOTE: unlike the native MODX environment, the MODXRenderer does not include aut
 
 ### MODXParser methods
 
-You can also directly access the MODXParser methods to perform ad hoc parsing and rendering of strings or template/Chunk files.
+You can also directly access the MODXParser methods to perform ad hoc parsing and rendering of strings or template and Chunk files.
+
+#### Templates
 
 ```
 $content = file_get_contents('/path/to/template.tpl');
 $renderer->processElementTags('', $content);
 ```
+The `processElementTags()` method modifies the `$content` in place by collecting all MODX Tags therein and replacing them with values from the array of "site settings" passed to the constructor.
+
+ You can merge in ad-hoc data by setting the `$data` property on the renderer before calling the method:
+
+ ```
+ $renderer->data = $myDataArray;
+ $renderer->processElementTags('', $content);
+ ```
+
+ In the calls shown above, unprocessed and un-cacheable tags will be left intact, in tag form, in the output. To remove them, pass the third and fourth arguments:
+
+```
+$renderer->processElementTags('', $content, true, true);
+```
+The first argument is for use internally by other methods during recursion. Pass an empty string when using the method directly.
+
+#### Chunks
+
+```
+$output = $renderer->getChunk('chunkName', $myDataArray);
+```
+The `getChunk()` method will get the contents of a file with name `{$chunkName}.tpl` in the `chunk_path` filesystem location and replace MODX Tags therein with data from both the "site settings" and the array passed in as the 2nd argument, if provided.
