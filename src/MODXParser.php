@@ -216,7 +216,7 @@ class MODXParser
             }
             /* Debug with $modx methods:
             if ($this->modx->getDebug() === true && !empty($matches)) {
-                $this->modx->log(modX::LOG_LEVEL_DEBUG, "\MODXRenderer\MODXParser::collectElementTags \$matches = " . print_r($matches, 1) . "\n");
+                $this->modx->log(modX::LOG_LEVEL_DEBUG, "\SepiaRiver\MODXParser::collectElementTags \$matches = " . print_r($matches, 1) . "\n");
                 $this->modx->cacheManager->writeFile(MODX_CORE_PATH . 'logs/parser.log', print_r($matches, 1) . "\n", 'a'); */
 
             return $matchCount;

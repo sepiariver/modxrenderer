@@ -102,7 +102,7 @@ abstract class MODXTag
     /**
      * Set a reference to the modX object, load the name and properties, and instantiate the tag class instance.
      *
-     * @param MODXParser $parser A reference to the MODXRenderer\MODXParser object
+     * @param MODXParser $parser A reference to the SepiaRiver\MODXParser object
      */
     public function __construct(MODXParser $parser)
     {
