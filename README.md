@@ -7,8 +7,8 @@ The current beta release supports MODX "Chunk" tags and "Placeholder" tags.
 ## Why?
 
 - Familiar (and much-loved by the author) MODX template syntax in any application or PHP environment >= 5.6.
-- Isolated parser functionality decoupled from the $modx container (or any container for that matter).
-- Unit tested with > 90% coverage.
+- Isolated parser functionality decoupled from the `$modx` container (or any container for that matter).
+- Unit tested with > 95% coverage. (Some paths intentionally omitted due to inability to reproduce test case. Help on this would be appreciated.)
 
 ## Installation
 
@@ -20,7 +20,40 @@ cd modxrenderer
 composer install # optionally --no-dev --no-scripts
 ```
 
+## Usage
 
+### Slim DI Container
 
+When initializing the MODXRenderer, the first argument is required—it must be an array with the following required elements:
+
+- 'template_path' => absolute path to the filesystem location of your template files
+- 'chunk_path' => absolute path to the filesystem location of your "Chunk" template files
+
+In the following example, an array of "site settings" is passed to the renderer. These are globally available values, which will be populated into placeholders with a double "++" token.
+
+```
+$container['renderer'] = function($c) {
+    $settings = $c->get('settings');
+    return new MODXRenderer\MODXRenderer($settings['renderer'], $settings['site']);
+};
+```
+
+### render()
+
+The way to use MODXRenderer in a Slim app is to call the `render()` method, which takes a PSR-7 `Response` object, and a template name.
+
+Example:
+
+```
+$renderer = $this->get('renderer'); // from DI Container
+$renderer->render($response, 'myView.tpl');
+```
+
+Optionally you can pass in an array of data with which to populate placeholders in the template.
+
+```
+$args = $myDataLayer->getDataArray();
+$renderer->render($response, 'myView.tpl', $args);
+```
 
 
