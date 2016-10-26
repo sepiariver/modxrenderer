@@ -9,7 +9,7 @@
  *              https://github.com/modxcms/revolution/blob/2.x/LICENSE.md (GPL)
  */
 
-namespace MODXRenderer;
+namespace SepiaRiver;
 
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;

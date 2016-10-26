@@ -7,7 +7,7 @@
  * character token at the beginning of the tag string.
  */
 
-namespace MODXRenderer;
+namespace SepiaRiver;
 
 abstract class MODXTag
 {

@@ -7,7 +7,7 @@
  * element tags embedded in text content.
  */
 
-namespace MODXRenderer;
+namespace SepiaRiver;
 
 class MODXParser
 {

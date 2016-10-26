@@ -5,7 +5,7 @@
  * [[$chunk_name]] Represents a chunk with name chunk_name.
  */
 
-namespace MODXRenderer;
+namespace SepiaRiver;
 
 class MODXChunkTag extends MODXTag
 {

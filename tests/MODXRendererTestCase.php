@@ -2,9 +2,9 @@
 
 namespace Tests\Renderer;
 
-use MODXRenderer\MODXRenderer;
-use MODXRenderer\MODXParser;
-use MODXRenderer\MODXChunkTag;
+use SepiaRiver\MODXRenderer;
+use SepiaRiver\MODXParser;
+use SepiaRiver\MODXChunkTag;
 use Slim\Http\Response;
 
 /**

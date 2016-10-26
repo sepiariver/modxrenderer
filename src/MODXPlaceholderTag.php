@@ -7,7 +7,7 @@
  * @uses modX::getPlaceholder() To retrieve the placeholder value
  */
 
-namespace MODXRenderer;
+namespace SepiaRiver;
 
 class MODXPlaceholderTag extends MODXTag
 {
