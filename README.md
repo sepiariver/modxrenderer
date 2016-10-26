@@ -1,12 +1,13 @@
 # MODXRenderer
 
-MODXRenderer is modelled after Slim's PHP view renderer, and can be used in a Slim app as such. Alternatively it can modify any PSR-7 response object, or simply parse a string with MODX Revolution template syntax.
+MODXRenderer is modeled after Slim's PHP view renderer, and can be used in a Slim app as such. Alternatively it can modify any PSR-7 response object, or simply parse a string with MODX Revolution template syntax.
 
 The current alpha release supports MODX "Chunk" tags and "Placeholder" tags. [Upcoming project milestones](https://github.com/sepiariver/modxrenderer/milestones) include:
 
 - Output filter support
 - More testing
 - Property sets
+- Submit to Packagist?
 
 **Resources**
 
@@ -18,8 +19,8 @@ The current alpha release supports MODX "Chunk" tags and "Placeholder" tags. [Up
 ## Why?
 
 - Familiar (and much-loved by the author) MODX template syntax in any application or PHP environment >= 5.6.
-- Isolated parser functionality decoupled from the `$modx` container (or any container for that matter).
-- [Unit tested with > 95% coverage](https://sepiariver.github.io/modxrenderer/test-results/). (Some paths intentionally omitted due to inability to reproduce test case. Help on this would be appreciated.)
+- Self-contained parser functionality decoupled from the `$modx` container (or any container for that matter).
+- [Unit tested with > 95% coverage](https://sepiariver.github.io/modxrenderer/test-results/). (Some paths intentionally omitted due to inability to fabricate test case. Help on this would be appreciated.)
 
 ## Installation
 
@@ -61,7 +62,7 @@ $settings['site'] = array(
 
 ### render()
 
-The most predictable pattern in which to use MODXRenderer in a Slim app is to call the `render()` method in a route closure. The method takes a PSR-7 `Response` object, which the Slim route provides, and a template name.
+The basic pattern in which to use MODXRenderer in a Slim app is to call the `render()` method in a route closure. The method takes a PSR-7 `Response` object, which Slim provides, and a template name.
 
 Example:
 
@@ -110,3 +111,7 @@ The first argument is for use internally by other methods during recursion. Pass
 $output = $renderer->getChunk('chunkName', $myDataArray);
 ```
 The `getChunk()` method will get the contents of a file with name `{$chunkName}.tpl` in the `chunk_path` filesystem location and replace MODX Tags therein with data from both the "site settings" and the array passed in as the 2nd argument, if provided.
+
+## Other Considerations
+
+This project is in alpha and not suitable for production.
