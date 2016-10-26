@@ -59,3 +59,12 @@ $renderer->render($response, 'myView.tpl', $args);
 ```
 
 _NOTE: unlike the native MODX environment, the MODXRenderer does not include automatic input sanitization. Un-sanitized inputs, for example those from `$args` set in request parameters, can be reflected in the parsed content and pose a security risk. Take care to sanitize untrusted data before passing it to the view renderer._
+
+### MODXParser methods
+
+You can also directly access the MODXParser methods to perform ad hoc parsing and rendering of strings or template/Chunk files.
+
+```
+$content = file_get_contents('/path/to/template.tpl');
+$renderer->processElementTags('', $content);
+```
