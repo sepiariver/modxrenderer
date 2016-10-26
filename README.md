@@ -4,11 +4,13 @@ MODXRenderer is modelled after Slim's PHP view renderer, and can be used in a Sl
 
 The current beta release supports MODX "Chunk" tags and "Placeholder" tags.
 
+The project is managed on [Github](https://github.com/sepiariver/modxrenderer/). Documentation is rendered at: [https://sepiariver.github.io/modxrenderer/](https://sepiariver.github.io/modxrenderer/).
+
 ## Why?
 
 - Familiar (and much-loved by the author) MODX template syntax in any application or PHP environment >= 5.6.
 - Isolated parser functionality decoupled from the `$modx` container (or any container for that matter).
-- [Unit tested with > 95% coverage](/test-results/). (Some paths intentionally omitted due to inability to reproduce test case. Help on this would be appreciated.)
+- [Unit tested with > 95% coverage](https://sepiariver.github.io/modxrenderer/test-results/). (Some paths intentionally omitted due to inability to reproduce test case. Help on this would be appreciated.)
 
 ## Installation
 
