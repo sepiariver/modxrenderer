@@ -29,6 +29,22 @@ class MODXFilter
 
     }
     /**
+     * __call mapping
+     */
+    public function __call($name, $args)
+    {
+        switch ($name) {
+            case 'else':
+                $this->otherwise($args[0], $args[1]);
+                break;
+            case 'default':
+                $this->isempty($args[0], $args[1]);
+                break;
+            default:
+                break;
+        }
+    }
+    /**
      * Set $condition. Can only be performed internally.
      */
     protected function setCondition($state) {
@@ -95,12 +111,12 @@ class MODXFilter
         }
         // otherwise nothing happens
     }
-    
+
     /**
      * "else" filter
      * result depends on $condition. filters modify input in place.
      */
-    public function else(&$input, $args) {
+    public function otherwise(&$input, $args) {
         $args = $this->getArgs($args);
         if (isset($args['value']) && ($this->getCondition() === false)) {
             $input = $args['value'];
@@ -108,31 +124,31 @@ class MODXFilter
         }
         // otherwise nothing happens
     }
-    
+
     /**
      * "default" filter
      * if input is empty output value from $args
      */
-    public function default(&$input, $args) 
+    public function isempty(&$input, $args)
     {
         $args = $this->getArgs($args);
         if ((strlen($input) === 0) && isset($args['value'])) {
             $input = $args['value'];
         }
     }
-    
+
     /**
      * "notempty" filter
      * if input is not empty output value from args
      */
-    public function notempty(&$input, $args) 
+    public function notempty(&$input, $args)
     {
         $args = $this->getArgs($args);
         if ((strlen($input) > 0) && isset($args['value'])) {
             $input = $args['value'];
         }
     }
-    
+
     /**
      * "trim" filter
      * calls php trim()
@@ -146,7 +162,7 @@ class MODXFilter
             $input = trim($input);
         }
     }
-    
+
     /**
      * "replace" filter
      * calls php str_replace()

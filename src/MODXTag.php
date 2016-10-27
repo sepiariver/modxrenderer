@@ -267,8 +267,9 @@ abstract class MODXTag
         /* split commands and modifiers and store them as properties for the output filtering */
         $methods = [];
         $args = [];
-        $output = $element->get('name');
+        $output = $this->get('name');
         $name = $output;
+var_dump($name);
         $splitPos = strpos($output, ':');
         if ($splitPos !== false && $splitPos > 0) {
             $matches = array ();
@@ -279,11 +280,17 @@ abstract class MODXTag
                 $args = $matches[2]; /* filter arguments */
             }
         }
-        $element->set('name', $name);
+        $this->set('name', $name);
+var_dump($name);
+var_dump($methods);
+var_dump($args);
+var_dump($this->_output);
         foreach ($methods as $i => $method) {
-            $filter->$method($this->_output, $args[i]);
+            $filter->$method($this->_output, $args[$i]);
+            var_dump($i);
+            var_dump($this->_output);
         }
-        
+
     }
 
     /**
