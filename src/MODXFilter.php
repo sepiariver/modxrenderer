@@ -52,7 +52,7 @@ class MODXFilter
     protected function getArgs($args) {
         $result = [];
         if (is_string($args)) {
-            $decoded = json_decode($args, true);
+            $decoded = json_decode(trim($args), true);
             if (is_array($decoded)) {
                 $result = $decoded;
             } else {
@@ -71,16 +71,7 @@ class MODXFilter
             $this->setCondition(($input == $args['value']));
         }
     }
-    /**
-     * "isStrictly" filter conditional
-     * conditional filters don't modify the input, only evaluate it and cache results
-     */
-    public function isStrictly($input, $args) {
-        $args = $this->getArgs($args);
-        if (isset($args['value'])) {
-            $this->setCondition(($input === $args['value']));
-        }
-    }
+
     /**
      * "isNot" filter conditional
      * conditional filters don't modify the input, only evaluate it and cache results
@@ -91,16 +82,7 @@ class MODXFilter
             $this->setCondition(($input != $args['value']));
         }
     }
-    /**
-     * "isNotStrictly" filter conditional
-     * conditional filters don't modify the input, only evaluate it and cache results
-     */
-    public function isNotStrictly($input, $args) {
-        $args = $this->getArgs($args);
-        if (isset($args['value'])) {
-            $this->setCondition(($input !== $args['value']));
-        }
-    }
+
     /**
      * "then" filter
      * result depends on $condition. filters modify input in place.
@@ -113,6 +95,7 @@ class MODXFilter
         }
         // otherwise nothing happens
     }
+    
     /**
      * "else" filter
      * result depends on $condition. filters modify input in place.
