@@ -1,0 +1,18 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="MODXRenderer Tests">
+            <directory>tests</directory>
+            <exclude>tests/chunks</exclude>
+            <exclude>tests/templates</exclude>
+        </testsuite>
+    </testsuites>
+    <filter>
+      <whitelist processUncoveredFilesFromWhitelist="true">
+        <directory suffix=".php">src</directory>
+      </whitelist>
+    </filter>
+    <logging>
+      <log type="coverage-html" target="docs/test-results" lowUpperBound="35"
+           highLowerBound="70"/>
+    </logging>
+</phpunit>
