@@ -135,9 +135,23 @@ class MODXFilter
     
     /**
      * "trim" filter
-     * just like php trim()
+     * calls php trim()
      */
     public function trim(&$input, $args)
+    {
+        $args = $this->getArgs($args);
+        if (isset($args['value'])) {
+            $input = trim($input, $args['value']);
+        } else {
+            $input = trim($input);
+        }
+    }
+    
+    /**
+     * "replace" filter
+     * calls php str_replace()
+     */
+    public function replace(&$input, $args)
     {
         $args = $this->getArgs($args);
         
