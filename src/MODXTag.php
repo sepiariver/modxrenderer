@@ -262,13 +262,29 @@ abstract class MODXTag
      *
      * @see modElement::filterOutput()
      */
-    /* TODO: support output filters
     public function filterOutput() {
         $filter = $this->getOutputFilter();
-        if ($filter !== null && $filter instanceof modOutputFilter) {
-            $filter->filter($this);
+        /* split commands and modifiers and store them as properties for the output filtering */
+        $methods = [];
+        $args = [];
+        $output = $element->get('name');
+        $name = $output;
+        $splitPos = strpos($output, ':');
+        if ($splitPos !== false && $splitPos > 0) {
+            $matches = array ();
+            $name = substr($output, 0, $splitPos);
+            $modifiers = substr($output, $splitPos);
+            if (preg_match_all('~:([^:=]+)(?:=`(.*?)`(?=:[^:=]+|$))?~s', $modifiers, $matches)) {
+                $methods = $matches[1]; /* filter methods */
+                $args = $matches[2]; /* filter arguments */
+            }
         }
-    }*/
+        $element->set('name', $name);
+        foreach ($methods as $i => $method) {
+            $filter->$method($this->_output, $args[i]);
+        }
+        
+    }
 
     /**
      * Get the raw source content of the tag element.
