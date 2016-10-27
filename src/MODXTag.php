@@ -93,11 +93,11 @@ abstract class MODXTag
      */
     public $_cacheable = true;
     /**
-     * Any output/input filters on this tag.
+     * Any output/input filter on this tag.
      *
-     * @var array
+     * @var object
      */
-    public $_filters = array('input' => null, 'output' => null);
+    public $_filter = null;
 
     /**
      * Set a reference to the modX object, load the name and properties, and instantiate the tag class instance.
@@ -243,22 +243,15 @@ abstract class MODXTag
     /**
      * Get an output filter instance configured for this Element.
      *
-     * @return modOutputFilter|null An output filter instance (or null if one cannot be loaded)
+     * @return MODXFilter|null An output filter instance (or null if one cannot be loaded)
      */
-    /* TODO: support output filters
-    public function & getOutputFilter() {
-        if (!isset ($this->_filters['output']) || !($this->_filters['output'] instanceof modOutputFilter)) {
-            if (!$outputFilterClass= $this->get('output_filter')) {
-                $outputFilterClass = $this->modx->getOption('output_filter',null,'filters.modOutputFilter');
-            }
-            if ($filterClass= $this->modx->loadClass($outputFilterClass, '', false, true)) {
-                if ($filter= new $filterClass($this->modx)) {
-                    $this->_filters['output']= $filter;
-                }
-            }
+    public function getOutputFilter() {
+        if (!$this->_filter || !($this->_filter instanceof MODXFilter)) {
+            //@TODO support customizing filter class?
+            $this->_filter = new MODXFilter();
         }
-        return $this->_filters['output'];
-    }*/
+        return $this->_filter;
+    }
 
     /**
      * Apply an output filter to a tag.
