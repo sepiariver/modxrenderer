@@ -98,6 +98,18 @@ abstract class MODXTag
      * @var object
      */
     public $_filter = null;
+    /**
+     * Filter methods on this tag.
+     *
+     * @var array
+     */
+    public $_filterMethods = [];
+    /**
+     * Filter arguments on this tag.
+     *
+     * @var array
+     */
+    public $_filterArgs = [];
 
     /**
      * Set a reference to the modX object, load the name and properties, and instantiate the tag class instance.
@@ -236,6 +248,7 @@ abstract class MODXTag
 
         $this->getTag();
         $this->getContent(is_string($content) ? array('content' => $content) : array());
+        $this->setFilters();
 
         return $this->_result;
     }
@@ -245,12 +258,31 @@ abstract class MODXTag
      *
      * @return MODXFilter|null An output filter instance (or null if one cannot be loaded)
      */
-    public function getOutputFilter() {
-        if (!$this->_filter || !($this->_filter instanceof MODXFilter)) {
+    public function getFilter() {
+        if (!empty($this->_filterMethods) && (!$this->_filter || !($this->_filter instanceof MODXFilter))) {
             //@TODO support customizing filter class?
             $this->_filter = new MODXFilter();
         }
         return $this->_filter;
+    }
+    /**
+     * Set filters for this tag.
+     *
+     */
+    protected function setFilters() {
+        $output = $this->get('name');
+        $name = $output;
+        $splitPos = strpos($output, ':');
+        if ($splitPos !== false && $splitPos > 0) {
+            $matches = array ();
+            $name = substr($output, 0, $splitPos);
+            $modifiers = substr($output, $splitPos);
+            if (preg_match_all('~:([^:=]+)(?:=`(.*?)`(?=:[^:=]+|$))?~s', $modifiers, $matches)) {
+                $this->_filterMethods = $matches[1]; /* filter methods */
+                $this->_filterArgs = $matches[2]; /* filter arguments */
+            }
+        }
+        $this->set('name', $name);
     }
 
     /**
@@ -263,34 +295,12 @@ abstract class MODXTag
      * @see modElement::filterOutput()
      */
     public function filterOutput() {
-        $filter = $this->getOutputFilter();
-        /* split commands and modifiers and store them as properties for the output filtering */
-        $methods = [];
-        $args = [];
-        $output = $this->get('name');
-        $name = $output;
-var_dump($name);
-        $splitPos = strpos($output, ':');
-        if ($splitPos !== false && $splitPos > 0) {
-            $matches = array ();
-            $name = substr($output, 0, $splitPos);
-            $modifiers = substr($output, $splitPos);
-            if (preg_match_all('~:([^:=]+)(?:=`(.*?)`(?=:[^:=]+|$))?~s', $modifiers, $matches)) {
-                $methods = $matches[1]; /* filter methods */
-                $args = $matches[2]; /* filter arguments */
+        $filter = $this->getFilter();
+        if ($filter) {
+            foreach ($this->_filterMethods as $i => $method) {
+                $filter->$method($this->_output, $this->_filterArgs[$i]);
             }
         }
-        $this->set('name', $name);
-var_dump($name);
-var_dump($methods);
-var_dump($args);
-var_dump($this->_output);
-        foreach ($methods as $i => $method) {
-            $filter->$method($this->_output, $args[$i]);
-            var_dump($i);
-            var_dump($this->_output);
-        }
-
     }
 
     /**

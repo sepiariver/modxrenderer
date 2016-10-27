@@ -52,8 +52,9 @@ class MODXPlaceholderTag extends MODXTag
                     );
             }
             if ($this->_output !== null || $this->parser->startedProcessingUncacheable()) {
-                //TODO: output filter support
-                //$this->filterOutput();
+                var_dump($this->_output);
+                $this->filterOutput();
+                var_dump($this->_output);
                 $this->_processed = true;
             }
         }

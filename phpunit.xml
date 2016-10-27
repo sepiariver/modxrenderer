@@ -4,6 +4,7 @@
             <directory>tests</directory>
             <exclude>tests/chunks</exclude>
             <exclude>tests/templates</exclude>
+            <exclude>tests/MODXRendererTest.php</exclude>
         </testsuite>
     </testsuites>
     <filter>

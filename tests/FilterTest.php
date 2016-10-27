@@ -8,9 +8,9 @@ use SepiaRiver\MODXChunkTag;
 use Slim\Http\Response;
 
 /**
- * MODXRendererTestCase.
+ * FilterTestCase
  */
-class SingleTestCase extends \PHPUnit_Framework_TestCase
+class FilterTestCase extends \PHPUnit_Framework_TestCase
 {
     const APP_CORE_PATH = '/Volumes/Media/_git/sr_modxrenderer/';
     const PUBLIC_BASE_PATH = '/Volumes/Media/_git/sr_modxrenderer/docs/';
