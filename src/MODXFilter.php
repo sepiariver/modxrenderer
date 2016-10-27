@@ -73,10 +73,10 @@ class MODXFilter
     }
 
     /**
-     * "isNot" filter conditional
+     * "isnot" filter conditional
      * conditional filters don't modify the input, only evaluate it and cache results
      */
-    public function isNot($input, $args) {
+    public function isnot($input, $args) {
         $args = $this->getArgs($args);
         if (isset($args['value'])) {
             $this->setCondition(($input != $args['value']));
@@ -119,6 +119,28 @@ class MODXFilter
         if ((strlen($input) === 0) && isset($args['value'])) {
             $input = $args['value'];
         }
+    }
+    
+    /**
+     * "notempty" filter
+     * if input is not empty output value from args
+     */
+    public function notempty(&$input, $args) 
+    {
+        $args = $this->getArgs($args);
+        if ((strlen($input) > 0) && isset($args['value'])) {
+            $input = $args['value'];
+        }
+    }
+    
+    /**
+     * "trim" filter
+     * just like php trim()
+     */
+    public function trim(&$input, $args)
+    {
+        $args = $this->getArgs($args);
+        
     }
 
 }
