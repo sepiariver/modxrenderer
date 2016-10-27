@@ -154,7 +154,9 @@ class MODXFilter
     public function replace(&$input, $args)
     {
         $args = $this->getArgs($args);
-        
+        $search = array_keys($args);
+        $replace = array_values($args);
+        $input = str_replace($search, $replace, $input);
     }
 
 }
