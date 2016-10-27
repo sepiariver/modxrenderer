@@ -108,5 +108,17 @@ class MODXFilter
         }
         // otherwise nothing happens
     }
+    
+    /**
+     * "default" filter
+     * if input is empty output value from $args
+     */
+    public function default(&$input, $args) 
+    {
+        $args = $this->getArgs($args);
+        if ((strlen($input) === 0) && isset($args['value'])) {
+            $input = $args['value'];
+        }
+    }
 
 }
